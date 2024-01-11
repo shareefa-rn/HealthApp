@@ -1,7 +1,8 @@
-import {SafeAreaView, View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {themeColors} from '../../theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ export default function WelcomeScreen() {
         </Text>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Image
-            source={require('../../assets/images/welcome.png')}
+            source={require('../../assets/images/medical-team.png')}
             style={{width: 350, height: 350}}
           />
         </View>
