@@ -12,7 +12,7 @@ import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {themeColors} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
-import FirebaseAuth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -21,7 +21,7 @@ export default function LoginScreen() {
 
   const handleSubmit = async () => {
     if (email && password) {
-      FirebaseAuth()
+      await auth()
         .signInWithEmailAndPassword(email, password)
         .then(data => {
           showSnackBar('Success! Logged into Application');

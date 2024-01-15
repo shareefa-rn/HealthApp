@@ -13,8 +13,8 @@ import {themeColors} from '../../theme';
 
 // create a component
 const HomeScreen = () => {
-  const handleSubmit = () => {
-    auth()
+  const handleSubmit = async () => {
+    await auth()
       .signOut()
       .then(() => console.log('User signed out!'));
   };

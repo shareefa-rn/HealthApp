@@ -11,7 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
 import {themeColors} from '../../theme';
-import FirebaseAuth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
 
 function SignUpScreen() {
@@ -22,7 +22,7 @@ function SignUpScreen() {
 
   const handleSubmit = async () => {
     if (email && password) {
-      FirebaseAuth()
+      await auth()
         .createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
           userCredential.user
