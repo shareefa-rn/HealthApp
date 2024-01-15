@@ -1,13 +1,52 @@
 //import liraries
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import {themeColors} from '../../theme';
 
 // create a component
 const HomeScreen = () => {
+  const handleSubmit = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>MyComponent</Text>
-    </View>
+    <KeyboardAvoidingView
+      style={{flex: 1, backgroundColor: themeColors.bg}}
+      behavior="padding">
+      <SafeAreaView
+        style={{
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+          flex: 2.5,
+          backgroundColor: 'white',
+        }}>
+        <View style={{paddingHorizontal: 24, paddingTop: 24, marginBottom: 20}}>
+          <TouchableOpacity
+            style={{padding: 16, backgroundColor: 'yellow', borderRadius: 20}}
+            onPress={handleSubmit}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: 'gray',
+              }}>
+              Signout
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

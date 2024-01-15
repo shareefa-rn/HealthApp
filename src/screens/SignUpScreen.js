@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,54 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
 import {themeColors} from '../../theme';
+import FirebaseAuth from '@react-native-firebase/auth';
+import Snackbar from 'react-native-snackbar';
 
-export default function SignUpScreen() {
+function SignUpScreen() {
   const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUserName] = useState('');
+
+  const handleSubmit = async () => {
+    if (email && password) {
+      FirebaseAuth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          userCredential.user
+            .updateProfile({
+              displayName: username,
+            })
+            .then(() => {
+              setEmail('');
+              setPassword('');
+              showSnackBar('Success! User Account created');
+              navigation.navigate('Login');
+            });
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            showSnackBar('Alert! email address is already in registered!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            showSnackBar('Alert! email address is invalid');
+          }
+
+          console.error(error);
+        });
+    } else {
+      showSnackBar('Email and Password are required!');
+    }
+  };
+
+  const showSnackBar = message => {
+    Snackbar.show({
+      text: message,
+      backgroundColor: 'red',
+    });
+  };
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1, backgroundColor: themeColors.bg}}
@@ -48,19 +93,6 @@ export default function SignUpScreen() {
         }}>
         <View style={{paddingHorizontal: 24, paddingTop: 24}}>
           <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Full Name</Text>
-            <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
-              value="john snow"
-              placeholder="Enter Name"
-            />
-          </View>
-          <View style={{marginBottom: 20}}>
             <Text style={{color: 'gray', marginLeft: 4}}>Email Address</Text>
             <TextInput
               style={{
@@ -69,8 +101,8 @@ export default function SignUpScreen() {
                 borderRadius: 20,
                 marginTop: 5,
               }}
-              value="john@gmail.com"
               placeholder="Enter Email"
+              onChangeText={ct => setEmail(ct)}
             />
           </View>
           <View style={{marginBottom: 20}}>
@@ -83,16 +115,31 @@ export default function SignUpScreen() {
                 marginTop: 5,
               }}
               secureTextEntry
-              value="test12345"
               placeholder="Enter Password"
+              onChangeText={ct => setPassword(ct)}
             />
           </View>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'gray', marginLeft: 4}}>Full Name</Text>
+            <TextInput
+              style={{
+                padding: 16,
+                backgroundColor: 'lightgray',
+                borderRadius: 20,
+                marginTop: 5,
+              }}
+              placeholder="Enter Full Name"
+              onChangeText={ct => setUserName(ct)}
+            />
+          </View>
+
           <TouchableOpacity
             style={{
               padding: 16,
               backgroundColor: 'yellow',
               borderRadius: 20,
-            }}>
+            }}
+            onPress={handleSubmit}>
             <Text
               style={{
                 fontSize: 20,
@@ -127,3 +174,5 @@ export default function SignUpScreen() {
     </KeyboardAvoidingView>
   );
 }
+
+export default SignUpScreen;

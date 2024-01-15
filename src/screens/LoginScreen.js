@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,39 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {themeColors} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
+import Snackbar from 'react-native-snackbar';
+import FirebaseAuth from '@react-native-firebase/auth';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async () => {
+    if (email && password) {
+      FirebaseAuth()
+        .signInWithEmailAndPassword(email, password)
+        .then(data => {
+          showSnackBar('Success! Logged into Application');
+
+          navigation.navigate('Home');
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+          showSnackBar('Email and Password wrong!');
+        });
+    } else {
+      showSnackBar('Email and Password are required!');
+    }
+  };
+
+  const showSnackBar = message => {
+    Snackbar.show({
+      text: message,
+      backgroundColor: 'red',
+    });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -58,7 +88,7 @@ export default function LoginScreen() {
                 marginTop: 5,
               }}
               placeholder="email"
-              value="john@gmail.com"
+              onChangeText={ct => setEmail(ct)}
             />
           </View>
           <View style={{marginBottom: 20}}>
@@ -72,7 +102,7 @@ export default function LoginScreen() {
               }}
               secureTextEntry
               placeholder="password"
-              value="test12345"
+              onChangeText={ct => setPassword(ct)}
             />
           </View>
           <TouchableOpacity style={{alignItems: 'flex-end'}}>
@@ -81,7 +111,8 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{padding: 16, backgroundColor: 'yellow', borderRadius: 20}}>
+            style={{padding: 16, backgroundColor: 'yellow', borderRadius: 20}}
+            onPress={handleSubmit}>
             <Text
               style={{
                 fontSize: 18,

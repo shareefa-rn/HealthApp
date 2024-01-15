@@ -1160,6 +1160,8 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - RNSnackbar (2.6.2):
+    - React-Core
   - RNSVG (14.1.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -1221,6 +1223,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1347,6 +1350,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1419,6 +1424,7 @@ SPEC CHECKSUMS:
   RNFBApp: 5ee688b07ed0fa692a3a8fd07df6d6ae41e4c3a0
   RNFBAuth: a800af76ce0baed0c839307aa0aa0c2443dbbee6
   RNScreens: 2b73f5eb2ac5d94fbd61fa4be0bfebd345716825
+  RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: e64aa65de36c0832d04e8c7bd614396c77a80047
