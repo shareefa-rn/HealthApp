@@ -13,12 +13,33 @@ import {useNavigation} from '@react-navigation/native';
 import {themeColors} from '../../theme';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
+import firestore from '@react-native-firebase/firestore';
 
 function SignUpScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUserName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const handleAddUserProfile = async () => {
+    try {
+      await firestore()
+        .collection('DoctorUserProfile')
+        .add({
+          userName: username,
+          email: email,
+          password: password,
+          contactNumber: phone,
+        })
+        .then(() => {
+          navigation.navigate('Login');
+          showSnackBar('Success! User Account created');
+        });
+    } catch (error) {
+      console.error('Error adding place:', error);
+    }
+  };
 
   const handleSubmit = async () => {
     if (email && password) {
@@ -30,10 +51,10 @@ function SignUpScreen() {
               displayName: username,
             })
             .then(() => {
+              handleAddUserProfile();
               setEmail('');
               setPassword('');
-              showSnackBar('Success! User Account created');
-              navigation.navigate('Login');
+              //  showSnackBar('Success! User Account created');
             });
         })
         .catch(error => {
@@ -63,7 +84,7 @@ function SignUpScreen() {
     <KeyboardAvoidingView
       style={{flex: 1, backgroundColor: themeColors.bg}}
       behavior="padding">
-      <SafeAreaView style={{flex: 1.5}}>
+      <SafeAreaView style={{flex: 1}}>
         <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -88,10 +109,36 @@ function SignUpScreen() {
         style={{
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
-          flex: 2.5,
+          flex: 3,
           backgroundColor: 'white',
         }}>
         <View style={{paddingHorizontal: 24, paddingTop: 24}}>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'gray', marginLeft: 4}}>Full Name</Text>
+            <TextInput
+              style={{
+                padding: 16,
+                backgroundColor: 'lightgray',
+                borderRadius: 20,
+                marginTop: 5,
+              }}
+              placeholder="Enter Full Name"
+              onChangeText={ct => setUserName(ct)}
+            />
+          </View>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'gray', marginLeft: 4}}>Contact Number</Text>
+            <TextInput
+              style={{
+                padding: 16,
+                backgroundColor: 'lightgray',
+                borderRadius: 20,
+                marginTop: 5,
+              }}
+              placeholder="Enter Contact Number"
+              onChangeText={ct => setPhone(ct)}
+            />
+          </View>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'gray', marginLeft: 4}}>Email Address</Text>
             <TextInput
@@ -117,19 +164,6 @@ function SignUpScreen() {
               secureTextEntry
               placeholder="Enter Password"
               onChangeText={ct => setPassword(ct)}
-            />
-          </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Full Name</Text>
-            <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
-              placeholder="Enter Full Name"
-              onChangeText={ct => setUserName(ct)}
             />
           </View>
 
