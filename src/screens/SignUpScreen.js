@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {themeColors} from '../../theme';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
 import firestore from '@react-native-firebase/firestore';
+import PersistanceHelper from '../helper/PersistanceHelper';
 
 function SignUpScreen() {
   const navigation = useNavigation();
@@ -21,6 +22,10 @@ function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [username, setUserName] = useState('');
   const [phone, setPhone] = useState('');
+
+  const [user, setUser] = useState('');
+
+  useEffect(() => {});
 
   const handleAddUserProfile = async () => {
     try {
@@ -97,6 +102,15 @@ function SignUpScreen() {
             }}>
             <ArrowLeftIcon size={20} color="black" />
           </TouchableOpacity>
+          <Text
+            style={{
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: 18,
+              padding: 10,
+            }}>
+            {user}
+          </Text>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Image

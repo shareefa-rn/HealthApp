@@ -11,4 +11,5 @@ export default {
   purple: 'purple',
   skyBlue: 'skyblue',
   appColor: '#7AB2CE',
+  yellow: 'yellow',
 };
