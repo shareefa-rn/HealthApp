@@ -1,25 +1,78 @@
-//import liraries
-import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import styles from '../styles';
 
-// create a component
-const AppointmentHistory = () => {
-  return (
-    <View style={styles.container}>
-      <Text>AppointmentHistory </Text>
+function AppointmentHistory() {
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [allPlaces, setAllPlaces] = useState([]); // Initial empty array of allPlaces
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Appointment')
+      .onSnapshot(querySnapshot => {
+        const allPlaces = [];
+
+        querySnapshot.forEach(documentSnapshot => {
+          allPlaces.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+        console.log('All place', allPlaces);
+
+        setAllPlaces(allPlaces);
+        //  setLoading(false);
+      });
+    setLoading(false);
+    // Unsubscribe from events when no longer in use
+    return () => subscriber;
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  const renderItem = ({item}) => (
+    <View style={styles.itemContainer}>
+      <Image
+        source={require('../../assets/images/user.png')}
+        style={styles.appointmentsimage}
+      />
+      <View>
+        <Text style={styles.title}>Doctor ID: {item.doctorId}</Text>
+        <Text>Patient ID: {item.patientId}</Text>
+      </View>
+      <View>
+        <Text> Date: {item.appmtDate}</Text>
+        <Text> Time: {item.appmtTime}</Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => alert(`Button pressed for ${item.title}`)}>
+        <Text style={styles.buttonText}>{item.status}</Text>
+      </TouchableOpacity>
     </View>
   );
-};
 
-// define your styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#2c3e50',
-  },
-});
+  return (
+    <View style={styles.appointmentscontainer}>
+      <FlatList
+        data={allPlaces}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
+    </View>
+  );
+}
 
-//make this component available to the app
 export default AppointmentHistory;

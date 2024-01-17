@@ -172,7 +172,45 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+
+  /** Doctor App values */
+  appointments: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+  },
+  itemContainer: {
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+  },
+  appointmentscontainer: {
+    flex: 1,
+    paddingTop: 10,
+  },
+  appointmentsimage: {
+    width: 18,
+    height: 18,
+  },
+  title: {
+    fontSize: 14,
+    flex: 1,
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });

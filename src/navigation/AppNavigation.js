@@ -7,11 +7,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import auth from '@react-native-firebase/auth';
 import DrawerNavigation from './DrawerNavigation';
 import 'react-native-gesture-handler';
-import HomeScreen from '../screens/HomeScreen';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import Colors from '../Colors';
 
-const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
@@ -43,33 +39,7 @@ export default function AppNavigation() {
           <Stack.Screen
             options={{headerShown: false}}
             name="DrawerNavigation"
-            component={() => (
-              <Drawer.Navigator
-                initialRouteName="Feed"
-                drawerContentOptions={{
-                  activeTintColor: Colors.bg,
-                  itemStyle: {
-                    borderColor: Colors.bg,
-                    marginVertical: 5,
-                    opacity: 0.8,
-                  },
-                }}>
-                <Drawer.Screen
-                  name="DashBoard"
-                  component={HomeScreen}
-                  options={{drawerLabel: 'DashBoard'}}
-                />
-                <Drawer.Screen
-                  name="Logout"
-                  component={() => {
-                    auth()
-                      .signOut()
-                      .then(() => console.log('User signed out!'));
-                  }}
-                  options={{drawerLabel: 'Logout'}}
-                />
-              </Drawer.Navigator>
-            )}
+            component={DrawerNavigation}
           />
         </Stack.Navigator>
       </NavigationContainer>
