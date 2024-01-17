@@ -1,24 +1,23 @@
-import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-import HomeScreen from '../screens/HomeScreen';
 import auth from '@react-native-firebase/auth';
+import DrawerNavigation from './DrawerNavigation';
+import 'react-native-gesture-handler';
+import HomeScreen from '../screens/HomeScreen';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import Colors from '../Colors';
 
+const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const [user, setUser] = useState(undefined);
 
   useEffect(() => {
-    /* setIsUserLoggedIn(
-      user?.data?.created && user?.data?.ttl && user?.data?.userId
-        ? true
-        : false,
-    );*/
     setIsUserLoggedIn(user?._user?.uid ? true : false);
   }, [user]);
 
@@ -42,9 +41,35 @@ export default function AppNavigation() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
-            name="Home"
             options={{headerShown: false}}
-            component={HomeScreen}
+            name="DrawerNavigation"
+            component={() => (
+              <Drawer.Navigator
+                initialRouteName="Feed"
+                drawerContentOptions={{
+                  activeTintColor: Colors.bg,
+                  itemStyle: {
+                    borderColor: Colors.bg,
+                    marginVertical: 5,
+                    opacity: 0.8,
+                  },
+                }}>
+                <Drawer.Screen
+                  name="DashBoard"
+                  component={HomeScreen}
+                  options={{drawerLabel: 'DashBoard'}}
+                />
+                <Drawer.Screen
+                  name="Logout"
+                  component={() => {
+                    auth()
+                      .signOut()
+                      .then(() => console.log('User signed out!'));
+                  }}
+                  options={{drawerLabel: 'Logout'}}
+                />
+              </Drawer.Navigator>
+            )}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -12,4 +12,5 @@ export default {
   skyBlue: 'skyblue',
   appColor: '#7AB2CE',
   yellow: 'yellow',
+  bg: '#877dfa',
 };
