@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
-import {themeColors} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
 import auth from '@react-native-firebase/auth';
+import Colors from '../Colors';
+import AppStyles from '../AppStyles';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -47,59 +48,37 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1, backgroundColor: themeColors.bg}}
+      style={AppStyles.KeyboardAvoidingView}
       behavior="padding">
       <SafeAreaView style={{flex: 1.5}}>
-        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+        <View style={AppStyles.backiconView}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{
-              backgroundColor: 'yellow',
-              padding: 10,
-              borderTopRightRadius: 20,
-              borderBottomRightRadius: 20,
-              marginLeft: 4,
-            }}>
+            style={AppStyles.backiconButton}>
             <ArrowLeftIcon size={20} color="black" />
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={AppStyles.topimageview}>
           <Image
             source={require('../../assets/images/login.png')}
-            style={{width: 200, height: 200}}
+            style={AppStyles.image200}
           />
         </View>
       </SafeAreaView>
-      <SafeAreaView
-        style={{
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
-          flex: 2.5,
-          backgroundColor: 'white',
-        }}>
-        <View style={{paddingHorizontal: 24, paddingTop: 24}}>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Email Address</Text>
+      <SafeAreaView style={AppStyles.signupViewWhiteBg}>
+        <View style={AppStyles.paddingHorizontal24}>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Email Address</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               placeholder="email"
               onChangeText={ct => setEmail(ct)}
             />
           </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Password</Text>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Password</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               secureTextEntry
               placeholder="password"
               onChangeText={ct => setPassword(ct)}
@@ -111,36 +90,17 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{padding: 16, backgroundColor: 'yellow', borderRadius: 20}}
+            style={AppStyles.roundButtonstyle}
             onPress={handleSubmit}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                color: 'gray',
-              }}>
-              Login
-            </Text>
+            <Text style={AppStyles.roundButtonTextstyle}>Login</Text>
           </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            color: 'gray',
-            paddingTop: 16,
-          }}>
-          Or
-        </Text>
+        <Text style={AppStyles.orButtonTextstyle}>Or</Text>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text style={{color: 'gray', fontWeight: 'bold'}}>
-            Don't have an account?
-          </Text>
+        <View style={AppStyles.topimageview}>
+          <Text style={AppStyles.smallGrayText}>Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={{fontWeight: 'bold', color: 'black'}}> Sign Up</Text>
+            <Text style={AppStyles.smallBlackText}> Sign Up</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {themeColors} from '../../theme';
 import LoginScreen from './LoginScreen';
 import PersistanceHelper from '../helper/PersistanceHelper';
+import Colors from '../Colors';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
@@ -59,7 +59,7 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: themeColors.bg}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: Colors.bg}}>
       <View style={{flex: 1, justifyContent: 'space-around', marginTop: 4}}>
         <Text
           style={{

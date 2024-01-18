@@ -7,6 +7,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import auth from '@react-native-firebase/auth';
 import DrawerNavigation from './DrawerNavigation';
 import 'react-native-gesture-handler';
+import DoctorAppointmentScreen from '../screens/DoctorAppointmentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,11 @@ export default function AppNavigation() {
             options={{headerShown: false}}
             name="DrawerNavigation"
             component={DrawerNavigation}
+          />
+          <Stack.Screen
+            name="doctorappointmentscreen"
+            options={{headerShown: true}}
+            component={DoctorAppointmentScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

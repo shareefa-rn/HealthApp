@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Colors from '../Colors';
 import auth from '@react-native-firebase/auth';
 import ProfileScreen from '../screens/ProfileScreen';
+import ManageAppointment from '../screens/ManageAppointment';
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,17 @@ function DrawerNavigation() {
         component={HomeScreen}
       />
       <Drawer.Screen
+        name="Manage Appointments"
+        options={{
+          drawerLabel: 'Manage Appointment',
+          title: 'Manage Appointment',
+          drawerIcon: () => (
+            <FontAwesome name="star" size={20} color="#808080" />
+          ),
+        }}
+        component={ManageAppointment}
+      />
+      <Drawer.Screen
         name="AppointmentHistory"
         options={{
           drawerLabel: 'AppointmentHistory',
@@ -92,7 +104,6 @@ function DrawerNavigation() {
         }}
         component={AppointmentHistory}
       />
-
       <Drawer.Screen
         name="ProfileScreen"
         options={{

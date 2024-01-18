@@ -10,11 +10,11 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
-import {themeColors} from '../../theme';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
 import firestore from '@react-native-firebase/firestore';
-import PersistanceHelper from '../helper/PersistanceHelper';
+import Colors from '../Colors';
+import AppStyles from '../AppStyles';
 
 function SignUpScreen() {
   const navigation = useNavigation();
@@ -87,94 +87,53 @@ function SignUpScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1, backgroundColor: themeColors.bg}}
+      style={AppStyles.KeyboardAvoidingView}
       behavior="padding">
       <SafeAreaView style={{flex: 1}}>
-        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+        <View style={AppStyles.backiconView}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{
-              backgroundColor: 'yellow',
-              padding: 10,
-              borderTopRightRadius: 20,
-              borderBottomRightRadius: 20,
-              marginLeft: 4,
-            }}>
+            style={AppStyles.backiconButton}>
             <ArrowLeftIcon size={20} color="black" />
           </TouchableOpacity>
-          <Text
-            style={{
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: 18,
-              padding: 10,
-            }}>
-            {user}
-          </Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={AppStyles.topimageview}>
           <Image
             source={require('../../assets/images/signup.png')}
-            style={{width: 165, height: 110}}
+            style={AppStyles.image160}
           />
         </View>
       </SafeAreaView>
-      <SafeAreaView
-        style={{
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
-          flex: 3,
-          backgroundColor: 'white',
-        }}>
-        <View style={{paddingHorizontal: 24, paddingTop: 24}}>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Full Name</Text>
+      <SafeAreaView style={AppStyles.signupViewWhiteBg}>
+        <View style={AppStyles.paddingHorizontal24}>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Full Name</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               placeholder="Enter Full Name"
               onChangeText={ct => setUserName(ct)}
             />
           </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Contact Number</Text>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Contact Number</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               placeholder="Enter Contact Number"
               onChangeText={ct => setPhone(ct)}
             />
           </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Email Address</Text>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Email Address</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               placeholder="Enter Email"
               onChangeText={ct => setEmail(ct)}
             />
           </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'gray', marginLeft: 4}}>Password</Text>
+          <View style={AppStyles.marginBottom20}>
+            <Text style={AppStyles.textinputTitle}>Password</Text>
             <TextInput
-              style={{
-                padding: 16,
-                backgroundColor: 'lightgray',
-                borderRadius: 20,
-                marginTop: 5,
-              }}
+              style={AppStyles.textinputStyel}
               secureTextEntry
               placeholder="Enter Password"
               onChangeText={ct => setPassword(ct)}
@@ -182,40 +141,17 @@ function SignUpScreen() {
           </View>
 
           <TouchableOpacity
-            style={{
-              padding: 16,
-              backgroundColor: 'yellow',
-              borderRadius: 20,
-            }}
+            style={AppStyles.roundButtonstyle}
             onPress={handleSubmit}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                color: 'gray',
-              }}>
-              Sign Up
-            </Text>
+            <Text style={AppStyles.roundButtonTextstyle}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            color: 'gray',
-            paddingTop: 16,
-          }}>
-          Or
-        </Text>
+        <Text style={AppStyles.orButtonTextstyle}>Or</Text>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text style={{color: 'gray', fontWeight: 'bold'}}>
-            Already have an account?
-          </Text>
+        <View style={AppStyles.topimageview}>
+          <Text style={AppStyles.smallGrayText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={{fontWeight: 'bold', color: 'black'}}> Login</Text>
+            <Text style={AppStyles.smallBlackText}> Login</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
