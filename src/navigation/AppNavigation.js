@@ -44,7 +44,7 @@ export default function AppNavigation() {
           />
           <Stack.Screen
             name="doctorappointmentscreen"
-            options={{headerShown: true}}
+            options={{headerShown: false}}
             component={DoctorAppointmentScreen}
           />
         </Stack.Navigator>
