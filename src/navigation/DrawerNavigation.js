@@ -8,6 +8,7 @@ import Colors from '../Colors';
 import auth from '@react-native-firebase/auth';
 import ProfileScreen from '../screens/ProfileScreen';
 import ManageAppointment from '../screens/ManageAppointment';
+import UpComingAppointment from '../screens/UpcomingAppointment';
 
 const Drawer = createDrawerNavigator();
 
@@ -83,6 +84,17 @@ function DrawerNavigation() {
         component={ProfileScreen}
       />
       <Drawer.Screen
+        name="UpComing Appointments"
+        options={{
+          drawerLabel: 'UpComing Appointments',
+          title: 'UpComing Appointments',
+          drawerIcon: () => (
+            <FontAwesome name="star" size={20} color="#808080" />
+          ),
+        }}
+        component={UpComingAppointment}
+      />
+      <Drawer.Screen
         name="Manage Appointments"
         options={{
           drawerLabel: 'Manage Appointment',
@@ -104,17 +116,7 @@ function DrawerNavigation() {
         }}
         component={AppointmentHistory}
       />
-      <Drawer.Screen
-        name="Home"
-        options={{
-          drawerLabel: 'Home',
-          title: 'Home',
-          drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
-          ),
-        }}
-        component={HomeScreen}
-      />
+
       <Drawer.Screen
         name="Logout"
         options={{
