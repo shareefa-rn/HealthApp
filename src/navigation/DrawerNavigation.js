@@ -72,15 +72,15 @@ function DrawerNavigation() {
         },
       }}>
       <Drawer.Screen
-        name="Home"
+        name="ProfileScreen"
         options={{
-          drawerLabel: 'Home',
-          title: 'Home',
+          drawerLabel: 'ProfileScreen',
+          title: 'ProfileScreen',
           drawerIcon: () => (
             <FontAwesome name="star" size={20} color="#808080" />
           ),
         }}
-        component={HomeScreen}
+        component={ProfileScreen}
       />
       <Drawer.Screen
         name="Manage Appointments"
@@ -105,15 +105,15 @@ function DrawerNavigation() {
         component={AppointmentHistory}
       />
       <Drawer.Screen
-        name="ProfileScreen"
+        name="Home"
         options={{
-          drawerLabel: 'ProfileScreen',
-          title: 'ProfileScreen',
+          drawerLabel: 'Home',
+          title: 'Home',
           drawerIcon: () => (
             <FontAwesome name="star" size={20} color="#808080" />
           ),
         }}
-        component={ProfileScreen}
+        component={HomeScreen}
       />
       <Drawer.Screen
         name="Logout"

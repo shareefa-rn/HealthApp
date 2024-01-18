@@ -8,6 +8,7 @@ import auth from '@react-native-firebase/auth';
 import DrawerNavigation from './DrawerNavigation';
 import 'react-native-gesture-handler';
 import DoctorAppointmentScreen from '../screens/DoctorAppointmentScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +37,7 @@ export default function AppNavigation() {
   if (isUserLoggedIn) {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}
             name="DrawerNavigation"

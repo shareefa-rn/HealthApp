@@ -172,21 +172,4 @@ const DoctorAppointmentScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingLeft: 8,
-  },
-});
-
 export default DoctorAppointmentScreen;

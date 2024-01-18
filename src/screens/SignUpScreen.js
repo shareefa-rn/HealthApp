@@ -13,7 +13,6 @@ import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
 import firestore from '@react-native-firebase/firestore';
-import Colors from '../Colors';
 import AppStyles from '../AppStyles';
 
 function SignUpScreen() {
