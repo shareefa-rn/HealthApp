@@ -49,4 +49,11 @@ export default StyleSheet.create({
   },
   smallGrayText: {color: 'gray', fontWeight: 'bold'},
   smallBlackText: {fontWeight: 'bold', color: 'black'},
+  userTypeTextStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center',
+    padding: 10,
+  },
 });

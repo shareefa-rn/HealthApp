@@ -15,7 +15,9 @@ import Snackbar from 'react-native-snackbar';
 import firestore from '@react-native-firebase/firestore';
 import AppStyles from '../AppStyles';
 
-function SignUpScreen() {
+function SignUpScreen({route}) {
+  const {userType} = route.params;
+
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -95,6 +97,7 @@ function SignUpScreen() {
             style={AppStyles.backiconButton}>
             <ArrowLeftIcon size={20} color="black" />
           </TouchableOpacity>
+          <Text style={AppStyles.userTypeTextStyle}>{userType} SignUp</Text>
         </View>
         <View style={AppStyles.topimageview}>
           <Image
@@ -149,7 +152,8 @@ function SignUpScreen() {
 
         <View style={AppStyles.topimageview}>
           <Text style={AppStyles.smallGrayText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Login', {userType})}>
             <Text style={AppStyles.smallBlackText}> Login</Text>
           </TouchableOpacity>
         </View>

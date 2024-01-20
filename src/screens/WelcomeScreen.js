@@ -10,24 +10,24 @@ import {
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import LoginScreen from './LoginScreen';
-import PersistanceHelper from '../helper/PersistanceHelper';
 import Colors from '../Colors';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
-  const [selectedGender, setSelectedGender] = useState(undefined);
+  const [userType, setUserType] = useState('patient');
   const USER_DOCTOR = 'Doctor';
   const USER_PATIENT = 'Patient';
-  const genderOptions = ['Doctor', 'Patient', 'Other'];
+  const userOptions = ['Doctor', 'Patient'];
 
   const onSubmit = () => {
-    if (selectedGender !== undefined && selectedGender !== null) {
-      switch (selectedGender) {
+    if (userType !== undefined && userType !== null) {
+      switch (userType) {
         case USER_DOCTOR:
-          PersistanceHelper.setUser(selectedGender);
-          navigation.navigate('SignUp');
+          navigation.navigate('SignUp', {userType});
+          break;
         case USER_PATIENT:
-          return <LoginScreen />;
+          navigation.navigate('Login', {userType});
+          break;
         default:
           return null;
       }
@@ -79,13 +79,13 @@ export default function WelcomeScreen() {
         <View style={styles.container}>
           <Text style={styles.label}>Select Categorie from below:</Text>
           <RadioButton
-            options={genderOptions}
-            selectedOption={selectedGender}
-            onSelect={option => setSelectedGender(option)}
+            options={userOptions}
+            selectedOption={userType}
+            onSelect={option => setUserType(option)}
           />
 
           <Text style={styles.selectedText}>
-            Selected Categorie: {selectedGender}
+            Selected Categorie: {userType}
           </Text>
         </View>
         <View style={{marginVertical: 16}}>
@@ -116,7 +116,7 @@ export default function WelcomeScreen() {
             <Text style={{color: 'white', fontWeight: 'bold'}}>
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity onPress={onSubmit}>
               <Text style={{fontWeight: 'bold', color: 'yellow'}}> Log In</Text>
             </TouchableOpacity>
           </View>

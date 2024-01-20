@@ -12,10 +12,11 @@ import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
 import auth from '@react-native-firebase/auth';
-import Colors from '../Colors';
 import AppStyles from '../AppStyles';
 
-export default function LoginScreen() {
+function LoginScreen({route}) {
+  const {userType} = route.params;
+
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,6 +58,7 @@ export default function LoginScreen() {
             style={AppStyles.backiconButton}>
             <ArrowLeftIcon size={20} color="black" />
           </TouchableOpacity>
+          <Text style={AppStyles.userTypeTextStyle}>{userType} Login</Text>
         </View>
         <View style={AppStyles.topimageview}>
           <Image
@@ -99,7 +101,8 @@ export default function LoginScreen() {
 
         <View style={AppStyles.topimageview}>
           <Text style={AppStyles.smallGrayText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignUp', {userType})}>
             <Text style={AppStyles.smallBlackText}> Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -107,3 +110,5 @@ export default function LoginScreen() {
     </KeyboardAvoidingView>
   );
 }
+
+export default LoginScreen;
