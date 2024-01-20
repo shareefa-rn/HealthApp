@@ -9,10 +9,77 @@ import auth from '@react-native-firebase/auth';
 import ProfileScreen from '../screens/ProfileScreen';
 import ManageAppointment from '../screens/ManageAppointment';
 import UpComingAppointment from '../screens/UpcomingAppointment';
+import {useEffect, useState} from 'react';
+import CreateAppointment from '../screens/CreateAppointment';
+import firestore from '@react-native-firebase/firestore';
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
+  const [user, setUser] = useState(undefined);
+  const [userType, setUserType] = useState('patient');
+  const [email, setEmail] = useState('');
+  const [username, setUserName] = useState('');
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (auth().currentUser) {
+        const fetchUserType = async () => {
+          const userProfileRef = firestore().collection('DoctorUserProfile');
+          const userSnapshot = await userProfileRef
+            .where('uid', '==', auth().currentUser.uid)
+            .get();
+
+          if (!userSnapshot.empty) {
+            // User profile exists, update state with existing data
+            const userData = userSnapshot.docs[0].data();
+            setUserType(userData.userType);
+          }
+        };
+
+        fetchUserType();
+      }
+    } catch (error) {
+      console.log('Error ? ', error);
+    }
+  }, [user]);
+
+  function onAuthStateChanged(user) {
+    console.log(auth().currentUser);
+
+    setEmail(auth().currentUser.email);
+    setUserName(auth().currentUser.displayName);
+
+    const fetchUserType = async () => {
+      try {
+        if (auth().currentUser) {
+          const userProfileRef = firestore().collection('DoctorUserProfile');
+          const userSnapshot = await userProfileRef
+            .where('uid', '==', auth().currentUser.uid)
+            .get();
+
+          if (!userSnapshot.empty) {
+            // User profile exists, update state with existing data
+            const userData = userSnapshot.docs[0].data();
+            setUserType(userData.userType);
+            setUser(user);
+          }
+        } else {
+          setUser(user);
+        }
+      } catch (error) {
+        console.log('Error ? ', error);
+      }
+    };
+
+    fetchUserType();
+  }
+
   return (
     <Drawer.Navigator
       drawerContent={props => {
@@ -42,14 +109,14 @@ function DrawerNavigation() {
                   fontWeight: 'bold',
                   color: '#111',
                 }}>
-                Isabella Joanna
+                Name: {username}
               </Text>
               <Text
                 style={{
                   fontSize: 16,
                   color: '#111',
                 }}>
-                Product Manager
+                Email: {email}
               </Text>
             </View>
             <DrawerItemList {...props} />
@@ -59,7 +126,7 @@ function DrawerNavigation() {
       screenOptions={{
         drawerStyle: {
           backgroundColor: '#fff',
-          width: 250,
+          width: 280,
         },
         headerStyle: {
           backgroundColor: Colors.bg,
@@ -92,19 +159,39 @@ function DrawerNavigation() {
             <FontAwesome name="star" size={20} color="#808080" />
           ),
         }}
+        initialParams={{userType: userType}} // Passing userType as a parameter
         component={UpComingAppointment}
       />
-      <Drawer.Screen
-        name="Manage Appointments"
-        options={{
-          drawerLabel: 'Manage Appointment',
-          title: 'Manage Appointment',
-          drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
-          ),
-        }}
-        component={ManageAppointment}
-      />
+      {userType === 'patient' && (
+        <>
+          <Drawer.Screen
+            name="CreateAppointment"
+            component={CreateAppointment}
+            options={{
+              drawerLabel: 'Create Appointment',
+              title: 'Create Appointment',
+              drawerIcon: () => (
+                <FontAwesome name="star" size={20} color="#808080" />
+              ),
+            }}
+          />
+        </>
+      )}
+      {userType === 'doctor' && (
+        <>
+          <Drawer.Screen
+            name="Manage Appointments"
+            options={{
+              drawerLabel: 'Manage Appointment',
+              title: 'Manage Appointment',
+              drawerIcon: () => (
+                <FontAwesome name="star" size={20} color="#808080" />
+              ),
+            }}
+            component={ManageAppointment}
+          />
+        </>
+      )}
       <Drawer.Screen
         name="AppointmentHistory"
         options={{
@@ -115,6 +202,7 @@ function DrawerNavigation() {
           ),
         }}
         component={AppointmentHistory}
+        initialParams={{userType: userType}} // Passing userType as a parameter
       />
 
       <Drawer.Screen
