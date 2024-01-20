@@ -37,6 +37,7 @@ function SignUpScreen({route}) {
           email: email,
           password: password,
           contactNumber: phone,
+          userType: userType,
         })
         .then(() => {
           navigation.navigate('Login');

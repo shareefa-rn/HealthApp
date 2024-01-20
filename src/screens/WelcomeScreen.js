@@ -5,36 +5,15 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import LoginScreen from './LoginScreen';
 import Colors from '../Colors';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
   const [userType, setUserType] = useState('patient');
-  const USER_DOCTOR = 'Doctor';
-  const USER_PATIENT = 'Patient';
   const userOptions = ['Doctor', 'Patient'];
-
-  const onSubmit = () => {
-    if (userType !== undefined && userType !== null) {
-      switch (userType) {
-        case USER_DOCTOR:
-          navigation.navigate('SignUp', {userType});
-          break;
-        case USER_PATIENT:
-          navigation.navigate('Login', {userType});
-          break;
-        default:
-          return null;
-      }
-    } else {
-      Alert.alert('Please select one categories');
-    }
-  };
 
   const RadioButton = ({options, selectedOption, onSelect}) => {
     return (
@@ -90,7 +69,7 @@ export default function WelcomeScreen() {
         </View>
         <View style={{marginVertical: 16}}>
           <TouchableOpacity
-            onPress={onSubmit}
+            onPress={() => navigation.navigate('SignUp', {userType})}
             style={{
               paddingVertical: 10,
               backgroundColor: 'yellow',
@@ -116,7 +95,8 @@ export default function WelcomeScreen() {
             <Text style={{color: 'white', fontWeight: 'bold'}}>
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={onSubmit}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login', {userType})}>
               <Text style={{fontWeight: 'bold', color: 'yellow'}}> Log In</Text>
             </TouchableOpacity>
           </View>
