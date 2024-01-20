@@ -17,7 +17,7 @@ const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
   const [user, setUser] = useState(undefined);
-  const [userType, setUserType] = useState('patient');
+  const [userType, setUserType] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUserName] = useState('');
 
@@ -27,45 +27,49 @@ function DrawerNavigation() {
   }, []);
 
   useEffect(() => {
-    try {
-      if (auth().currentUser) {
-        const fetchUserType = async () => {
-          const userProfileRef = firestore().collection('DoctorUserProfile');
-          const userSnapshot = await userProfileRef
-            .where('uid', '==', auth().currentUser.uid)
-            .get();
+    if (auth().currentUser) {
+      const fetchUserType = async () => {
+        const userProfileRef = firestore().collection('UserProfile');
+        const userSnapshot = await userProfileRef
+          .where('uid', '==', auth().currentUser.uid)
+          .get();
+        console.log('snap==', userSnapshot);
 
-          if (!userSnapshot.empty) {
-            // User profile exists, update state with existing data
-            const userData = userSnapshot.docs[0].data();
-            setUserType(userData.userType);
-          }
-        };
+        if (!userSnapshot.empty) {
+          // User profile exists, update state with existing data
+          const userData = userSnapshot.docs[0].data();
+          console.log(userData.userType);
 
-        fetchUserType();
-      }
-    } catch (error) {
-      console.log('Error ? ', error);
+          setUserType(userData.userType);
+        }
+      };
+
+      fetchUserType();
     }
-  }, [user]);
+  }, []);
 
   function onAuthStateChanged(user) {
-    console.log(auth().currentUser);
-
-    setEmail(auth().currentUser.email);
-    setUserName(auth().currentUser.displayName);
+    console.log('onAuthStateChanged==', auth().currentUser.uid.userType);
+    if (auth().currentUser) {
+      setEmail(auth().currentUser.email);
+      setUserName(auth().currentUser.displayName);
+    }
 
     const fetchUserType = async () => {
       try {
         if (auth().currentUser) {
-          const userProfileRef = firestore().collection('DoctorUserProfile');
+          const uid = auth().currentUser.uid;
+          const userProfileRef = firestore().collection('UserProfile');
           const userSnapshot = await userProfileRef
-            .where('uid', '==', auth().currentUser.uid)
+            .where('uid', '==', uid)
             .get();
+          console.log('onAuthStateChanged==', userSnapshot);
 
           if (!userSnapshot.empty) {
             // User profile exists, update state with existing data
             const userData = userSnapshot.docs[0].data();
+            console.log(userData.userType);
+
             setUserType(userData.userType);
             setUser(user);
           }
@@ -162,7 +166,7 @@ function DrawerNavigation() {
         initialParams={{userType: userType}} // Passing userType as a parameter
         component={UpComingAppointment}
       />
-      {userType === 'patient' && (
+      {userType === 'Patient' && (
         <>
           <Drawer.Screen
             name="CreateAppointment"
@@ -177,7 +181,7 @@ function DrawerNavigation() {
           />
         </>
       )}
-      {userType === 'doctor' && (
+      {userType === 'Doctor' && (
         <>
           <Drawer.Screen
             name="Manage Appointments"

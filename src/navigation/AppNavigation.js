@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const [user, setUser] = useState(undefined);
-
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   useEffect(() => {
     setIsUserLoggedIn(user?._user?.uid ? true : false);
   }, [user]);
@@ -26,14 +26,12 @@ export default function AppNavigation() {
 
   function onAuthStateChanged(user) {
     //console.log(user.displayName);
-    console.log('Current User ', user, isUserLoggedIn);
+    setIsUserLoggedIn(user?._user?.uid ? true : false);
+
+    console.log('Current User ', user);
     setUser(user);
   }
 
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(
-    // user?.data?.created && user?.data?.ttl && user?.data?.userId ? true : false,
-    false,
-  );
   if (isUserLoggedIn) {
     return (
       <NavigationContainer>

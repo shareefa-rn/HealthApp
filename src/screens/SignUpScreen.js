@@ -24,14 +24,12 @@ function SignUpScreen({route}) {
   const [username, setUserName] = useState('');
   const [phone, setPhone] = useState('');
 
-  const [user, setUser] = useState('');
-
   useEffect(() => {});
 
   const handleAddUserProfile = async () => {
     try {
       await firestore()
-        .collection('DoctorUserProfile')
+        .collection('UserProfile')
         .add({
           userName: username,
           email: email,
