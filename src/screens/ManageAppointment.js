@@ -53,53 +53,31 @@ function ManageAppointment() {
   if (loading) {
     return <ActivityIndicator />;
   }
+  const handleAction = async status => {
+    try {
+      const userProfileRef = firestore().collection('Appointment');
+      const userSnapshot = await userProfileRef
+        .where('doctorId', '==', auth().currentUser.uid)
+        .where('status', '==', 'pending')
+        .get();
 
-  const handleAction = async (status, anyItem) => {
-    // Perform validation if needed
-    console.log('anyItem==', anyItem);
-    //extracting varible from anyitem
-    const {
-      patientId,
-      patientName,
-      doctorId,
-      doctorName,
-      customMessage,
-      appmtDate,
-      appmtTime,
-    } = anyItem;
+      if (selectedAppointment && selectedAppointment.doctorId) {
+        // Update appointment status and remove from the list
+        userProfileRef
+          .doc(userSnapshot.docs[0].id)
+          .update({...selectedAppointment, status});
 
-    // Create an appointment object
-    const appointment = {
-      patientId,
-      patientName,
-      doctorId,
-      doctorName,
-      customMessage,
-      appmtDate,
-      appmtTime,
-      status,
-    };
-
-    const userPositionRef = firestore().collection('Appointment');
-    const userPositionSnapshot = await userPositionRef
-      .where('patientId', '==', patientId)
-      .get();
-
-    console.log('mange appnt==', appointment);
-    // Save the appointment to the database
-
-    if (userPositionSnapshot.empty) {
-      // No existing document, add a new one
-      await firestore().collection('Appointment').add(appointment);
-      Alert.alert('Added: User Position Saved Successfully!');
-      setModalVisible(false);
-    } else {
-      // Update the existing document
-      await userPositionRef
-        .doc(userPositionSnapshot.docs[0].id)
-        .update(appointment);
-      Alert.alert('Updated: Appointment Position Successfully!');
-      setModalVisible(false);
+        // Close the modal
+        setModalVisible(false);
+      } else {
+        console.error(
+          'Selected appointment or its ID is invalid:',
+          selectedAppointment,
+        );
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
     }
   };
 
@@ -154,11 +132,11 @@ function ManageAppointment() {
             }}>
             <Button
               title="Reject"
-              onPress={() => handleAction('rejected', selectedAppointment)} // Pass a function reference
+              onPress={() => handleAction('rejected')} // Pass a function reference
             />
             <Button
               title="Approve"
-              onPress={() => handleAction('approved', selectedAppointment)} // Pass a function reference
+              onPress={() => handleAction('approved')} // Pass a function reference
             />
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
