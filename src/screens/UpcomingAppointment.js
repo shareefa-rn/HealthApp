@@ -48,24 +48,27 @@ function UpComingAppointment() {
 
   const renderItem = ({item}) => (
     <View style={styles.itemContainer}>
-      <Image
-        source={require('../../assets/images/user.png')}
-        style={styles.appointmentsimage}
-      />
-      <View>
-        <Text style={styles.title}>Doctor ID: {item.doctorId}</Text>
-        <Text>Patient ID: {item.patientId}</Text>
-      </View>
-      <View>
-        <Text> Date: {item.appmtDate}</Text>
-        <Text> Time: {item.appmtTime}</Text>
+      <View style={{flex: 0.5}}>
+        <Image
+          source={require('../../assets/images/user.png')}
+          style={styles.appointmentsimage}
+        />
       </View>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('doctorappointmentscreen')}>
-        <Text style={styles.buttonText}>{item.status}</Text>
-      </TouchableOpacity>
+      <View style={{flex: 2.5}}>
+        <Text style={styles.title}>Doctor Name: {item.doctorName}</Text>
+        <Text>Patient Name: {item.patientName}</Text>
+        <Text>Date: {item.appmtDate}</Text>
+        <Text>Time: {item.appmtTime}</Text>
+        <Text>Message: {item.customMessage}</Text>
+      </View>
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('doctorappointmentscreen')}>
+          <Text style={styles.buttonText}>{item.status}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 

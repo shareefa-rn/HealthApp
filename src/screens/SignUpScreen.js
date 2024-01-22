@@ -5,15 +5,16 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
-import firestore from '@react-native-firebase/firestore';
 import AppStyles from '../AppStyles';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 function SignUpScreen({route}) {
   const {userType} = route.params;
@@ -23,20 +24,24 @@ function SignUpScreen({route}) {
   const [password, setPassword] = useState('');
   const [username, setUserName] = useState('');
   const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [speciality, setSpeciality] = useState('');
 
-  useEffect(() => {});
+  const handleAddUserProfile = async userCredential => {
+    const userObject = {
+      uid: userCredential.user.uid,
+      username,
+      email,
+      phone,
+      userType,
+      location,
+      speciality,
+    };
 
-  const handleAddUserProfile = async () => {
     try {
       await firestore()
         .collection('UserProfile')
-        .add({
-          userName: username,
-          email: email,
-          password: password,
-          contactNumber: phone,
-          userType: userType,
-        })
+        .add(userObject)
         .then(() => {
           navigation.navigate('Login');
           showSnackBar('Success! User Account created');
@@ -56,7 +61,7 @@ function SignUpScreen({route}) {
               displayName: username,
             })
             .then(() => {
-              handleAddUserProfile();
+              handleAddUserProfile(userCredential);
               setEmail('');
               setPassword('');
               //  showSnackBar('Success! User Account created');
@@ -78,6 +83,34 @@ function SignUpScreen({route}) {
     }
   };
 
+  const renderDoctorFields = () => {
+    if (userType === 'Doctor') {
+      return (
+        <>
+          <View style={AppStyles.marginBottom20}>
+            <TextInput
+              style={AppStyles.textinputStyel}
+              autoCapitalize="none"
+              value={speciality}
+              placeholder="Enter your Speciality"
+              onChangeText={text => setSpeciality(text)}
+            />
+          </View>
+          <View style={AppStyles.marginBottom20}>
+            <TextInput
+              style={AppStyles.textinputStyel}
+              autoCapitalize="none"
+              placeholder="Enter your Location"
+              onChangeText={text => setLocation(text)}
+              value={location}
+            />
+          </View>
+        </>
+      );
+    }
+    return null;
+  };
+
   const showSnackBar = message => {
     Snackbar.show({
       text: message,
@@ -89,74 +122,79 @@ function SignUpScreen({route}) {
     <KeyboardAvoidingView
       style={AppStyles.KeyboardAvoidingView}
       behavior="padding">
-      <SafeAreaView style={{flex: 1}}>
-        <View style={AppStyles.backiconView}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={AppStyles.backiconButton}>
-            <ArrowLeftIcon size={20} color="black" />
-          </TouchableOpacity>
-          <Text style={AppStyles.userTypeTextStyle}>{userType} SignUp</Text>
-        </View>
-        <View style={AppStyles.topimageview}>
-          <Image
-            source={require('../../assets/images/signup.png')}
-            style={AppStyles.image160}
-          />
-        </View>
-      </SafeAreaView>
-      <SafeAreaView style={AppStyles.signupViewWhiteBg}>
-        <View style={AppStyles.paddingHorizontal24}>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Full Name</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              placeholder="Enter Full Name"
-              onChangeText={ct => setUserName(ct)}
+      <ScrollView>
+        <SafeAreaView style={{flex: 1}}>
+          <View style={AppStyles.backiconView}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={AppStyles.backiconButton}>
+              <ArrowLeftIcon size={20} color="black" />
+            </TouchableOpacity>
+            <Text style={AppStyles.userTypeTextStyle}>{userType} SignUp</Text>
+          </View>
+          <View style={AppStyles.topimageview}>
+            <Image
+              source={require('../../assets/images/signup.png')}
+              style={AppStyles.image160}
             />
           </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Contact Number</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              placeholder="Enter Contact Number"
-              onChangeText={ct => setPhone(ct)}
-            />
-          </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Email Address</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              placeholder="Enter Email"
-              onChangeText={ct => setEmail(ct)}
-            />
-          </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Password</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              secureTextEntry
-              placeholder="Enter Password"
-              onChangeText={ct => setPassword(ct)}
-            />
-          </View>
+        </SafeAreaView>
+        <SafeAreaView style={AppStyles.signupViewWhiteBg}>
+          <View style={AppStyles.paddingHorizontal24}>
+            <View style={AppStyles.marginBottom20}>
+              <Text style={AppStyles.textinputTitle}>Full Name</Text>
+              <TextInput
+                style={AppStyles.textinputStyel}
+                placeholder="Enter Full Name"
+                onChangeText={ct => setUserName(ct)}
+              />
+            </View>
+            <View style={AppStyles.marginBottom20}>
+              <Text style={AppStyles.textinputTitle}>Contact Number</Text>
+              <TextInput
+                style={AppStyles.textinputStyel}
+                placeholder="Enter Contact Number"
+                onChangeText={ct => setPhone(ct)}
+              />
+            </View>
+            <View style={AppStyles.marginBottom20}>
+              <Text style={AppStyles.textinputTitle}>Email Address</Text>
+              <TextInput
+                style={AppStyles.textinputStyel}
+                placeholder="Enter Email"
+                onChangeText={ct => setEmail(ct)}
+              />
+            </View>
+            <View style={AppStyles.marginBottom20}>
+              <Text style={AppStyles.textinputTitle}>Password</Text>
+              <TextInput
+                style={AppStyles.textinputStyel}
+                secureTextEntry
+                placeholder="Enter Password"
+                onChangeText={ct => setPassword(ct)}
+              />
+            </View>
+            {renderDoctorFields()}
 
-          <TouchableOpacity
-            style={AppStyles.roundButtonstyle}
-            onPress={handleSubmit}>
-            <Text style={AppStyles.roundButtonTextstyle}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={AppStyles.orButtonTextstyle}>Or</Text>
+            <TouchableOpacity
+              style={AppStyles.roundButtonstyle}
+              onPress={handleSubmit}>
+              <Text style={AppStyles.roundButtonTextstyle}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={AppStyles.orButtonTextstyle}>Or</Text>
 
-        <View style={AppStyles.topimageview}>
-          <Text style={AppStyles.smallGrayText}>Already have an account?</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login', {userType})}>
-            <Text style={AppStyles.smallBlackText}> Login</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+          <View style={AppStyles.topimageview}>
+            <Text style={AppStyles.smallGrayText}>
+              Already have an account?
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login', {userType})}>
+              <Text style={AppStyles.smallBlackText}> Login</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }

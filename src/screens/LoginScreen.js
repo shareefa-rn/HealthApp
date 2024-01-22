@@ -28,8 +28,7 @@ function LoginScreen({route}) {
         .then(data => {
           showSnackBar('Success! Logged into Application');
 
-          navigation.navigate('Home');
-          console.log(data);
+          console.log('login success', data);
         })
         .catch(err => {
           console.log(err);

@@ -56,4 +56,14 @@ export default StyleSheet.create({
     textAlign: 'center',
     padding: 10,
   },
+  itemContainer: {
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+  },
 });

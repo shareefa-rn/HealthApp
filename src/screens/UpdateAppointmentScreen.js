@@ -16,8 +16,9 @@ import firestore from '@react-native-firebase/firestore';
 import AppStyles from '../AppStyles';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
-const DoctorAppointmentScreen = () => {
+const UpdateAppointmentScreen = route => {
   const [doctorId, setDoctorId] = useState('');
   const [patientId, setPatientId] = useState('');
   const [customMessage, setCustomMessage] = useState('');
@@ -25,6 +26,7 @@ const DoctorAppointmentScreen = () => {
   const [appmtTime, setAppmtTime] = useState('');
   const [status, setStatus] = useState('');
   const navigation = useNavigation();
+  const {item} = route.params;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -34,7 +36,7 @@ const DoctorAppointmentScreen = () => {
           .where('patientId', '==', '12456789')
           .get();
 
-        console.log(userSnapshot.docs);
+        console.log('item', item);
 
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data();
@@ -69,7 +71,7 @@ const DoctorAppointmentScreen = () => {
     };
     const userPositionRef = firestore().collection('Appointment');
     const userPositionSnapshot = await userPositionRef
-      .where('patientId', '==', '12456789')
+      .where('patientId', '==', patientId)
       .get();
 
     console.log(userPositionSnapshot.docs);
@@ -172,4 +174,4 @@ const DoctorAppointmentScreen = () => {
   );
 };
 
-export default DoctorAppointmentScreen;
+export default UpdateAppointmentScreen;

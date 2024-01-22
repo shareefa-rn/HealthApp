@@ -191,6 +191,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
+    flex: 1,
   },
   appointmentscontainer: {
     flex: 1,

@@ -43,24 +43,26 @@ function AppointmentHistory() {
 
   const renderItem = ({item}) => (
     <View style={styles.itemContainer}>
-      <Image
-        source={require('../../assets/images/user.png')}
-        style={styles.appointmentsimage}
-      />
-      <View>
-        <Text style={styles.title}>Doctor ID: {item.doctorId}</Text>
-        <Text>Patient ID: {item.patientId}</Text>
+      <View style={{flex: 0.5}}>
+        <Image
+          source={require('../../assets/images/user.png')}
+          style={styles.appointmentsimage}
+        />
       </View>
-      <View>
-        <Text> Date: {item.appmtDate}</Text>
-        <Text> Time: {item.appmtTime}</Text>
+      <View style={{flex: 2.5}}>
+        <Text style={styles.title}>Doctor Name: {item.doctorName}</Text>
+        <Text>Patient Name: {item.patientName}</Text>
+        <Text>Date: {item.appmtDate}</Text>
+        <Text>Time: {item.appmtTime}</Text>
+        <Text>Message: {item.customMessage}</Text>
       </View>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => alert(`Button pressed for ${item.title}`)}>
-        <Text style={styles.buttonText}>{item.status}</Text>
-      </TouchableOpacity>
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => alert(`Button pressed for ${item.title}`)}>
+          <Text style={styles.buttonText}>{item.status}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 

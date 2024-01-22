@@ -10,8 +10,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ManageAppointment from '../screens/ManageAppointment';
 import UpComingAppointment from '../screens/UpcomingAppointment';
 import {useEffect, useState} from 'react';
-import CreateAppointment from '../screens/CreateAppointment';
 import firestore from '@react-native-firebase/firestore';
+import CreateAppointmentScreen from '../screens/CreateAppointmentScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -27,6 +27,8 @@ function DrawerNavigation() {
   }, []);
 
   useEffect(() => {
+    console.log(auth().currentUser.uid);
+
     if (auth().currentUser) {
       const fetchUserType = async () => {
         const userProfileRef = firestore().collection('UserProfile');
@@ -49,26 +51,30 @@ function DrawerNavigation() {
   }, []);
 
   function onAuthStateChanged(user) {
-    console.log('onAuthStateChanged==', auth().currentUser.uid.userType);
+    console.log('auth().currentUser==', auth().currentUser);
+    console.log('().user==', user);
+
     if (auth().currentUser) {
       setEmail(auth().currentUser.email);
       setUserName(auth().currentUser.displayName);
     }
 
-    const fetchUserType = async () => {
+    async function fetchUserType() {
       try {
         if (auth().currentUser) {
           const uid = auth().currentUser.uid;
           const userProfileRef = firestore().collection('UserProfile');
+          console.log('UserSnapshot: userProfileRef', userProfileRef);
+
           const userSnapshot = await userProfileRef
-            .where('uid', '==', uid)
+            .where('uid', '==', auth().currentUser.uid)
             .get();
-          console.log('onAuthStateChanged==', userSnapshot);
+          console.log('UserSnapshot:', userSnapshot.docs);
 
           if (!userSnapshot.empty) {
             // User profile exists, update state with existing data
             const userData = userSnapshot.docs[0].data();
-            console.log(userData.userType);
+            console.log('UserType:', userData.userType);
 
             setUserType(userData.userType);
             setUser(user);
@@ -77,9 +83,9 @@ function DrawerNavigation() {
           setUser(user);
         }
       } catch (error) {
-        console.log('Error ? ', error);
+        console.log('Error fetching user type:', error);
       }
-    };
+    }
 
     fetchUserType();
   }
@@ -166,35 +172,32 @@ function DrawerNavigation() {
         initialParams={{userType: userType}} // Passing userType as a parameter
         component={UpComingAppointment}
       />
-      {userType === 'Patient' && (
-        <>
-          <Drawer.Screen
-            name="CreateAppointment"
-            component={CreateAppointment}
-            options={{
-              drawerLabel: 'Create Appointment',
-              title: 'Create Appointment',
-              drawerIcon: () => (
-                <FontAwesome name="star" size={20} color="#808080" />
-              ),
-            }}
-          />
-        </>
-      )}
+
       {userType === 'Doctor' && (
-        <>
-          <Drawer.Screen
-            name="Manage Appointments"
-            options={{
-              drawerLabel: 'Manage Appointment',
-              title: 'Manage Appointment',
-              drawerIcon: () => (
-                <FontAwesome name="star" size={20} color="#808080" />
-              ),
-            }}
-            component={ManageAppointment}
-          />
-        </>
+        <Drawer.Screen
+          name="Manage Appointments"
+          options={{
+            drawerLabel: 'Manage Appointment',
+            title: 'Manage Appointment',
+            drawerIcon: () => (
+              <FontAwesome name="star" size={20} color="#808080" />
+            ),
+          }}
+          component={ManageAppointment}
+        />
+      )}
+      {userType === 'Patient' && (
+        <Drawer.Screen
+          name="CreateAppointmentScreen"
+          component={CreateAppointmentScreen}
+          options={{
+            drawerLabel: 'Create Appointment',
+            title: 'Create Appointment',
+            drawerIcon: () => (
+              <FontAwesome name="star" size={20} color="#808080" />
+            ),
+          }}
+        />
       )}
       <Drawer.Screen
         name="AppointmentHistory"
