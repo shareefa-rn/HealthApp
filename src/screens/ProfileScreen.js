@@ -10,6 +10,7 @@ import {
   Button,
   SafeAreaView,
   ScrollView,
+  Alert,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -17,7 +18,7 @@ import AppStyles from '../AppStyles';
 import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = ({route}) => {
-  const {userId} = '8w9NSNRrgTZqkNZ9dZeR1ZWMOv82';
+  const {userId} = auth().currentUser.uid;
   const [user, setUser] = useState(null);
 
   const [qualificationModalVisible, setQualificationModalVisible] =
@@ -32,72 +33,125 @@ const ProfileScreen = ({route}) => {
   const [institute, setInstitute] = useState('');
   const [passingYear, setPassingYear] = useState('');
 
-  const [doctorId, setDoctorId] = useState('');
-  const [patientId, setPatientId] = useState('');
-  const [customMessage, setCustomMessage] = useState('');
-  const [appmtDate, setAppmtDate] = useState('');
-  const [appmtTime, setAppmtTime] = useState('');
-  const [status, setStatus] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUserName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [speciality, setSpeciality] = useState('');
+  const [userType, setUserType] = useState('');
+
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Fetch user details from Firestore based on userId
-    const fetchUserProfile = async () => {
-      try {
-        const userProfileRef = firestore()
-          .collection('DoctorUserProfile')
-          .doc(userId);
-        const userSnapshot = await userProfileRef.get();
+    console.log(auth().currentUser.uid);
 
-        if (userSnapshot.exists) {
-          setUser(userSnapshot.data());
+    if (auth().currentUser) {
+      const fetchUserType = async () => {
+        const userProfileRef = firestore().collection('UserProfile');
+        const userSnapshot = await userProfileRef
+          .where('uid', '==', auth().currentUser.uid)
+          .get();
+        console.log('snap==', userSnapshot);
+
+        if (!userSnapshot.empty) {
+          // User profile exists, update state with existing data
+          const userData = userSnapshot.docs[0].data();
+          console.log('userdata=123=', userData);
+          console.log('userdata=123=', auth().currentUser.uid);
+
+          // Update the form values with the fetched data
+          setUserName(userData.username);
+          setEmail(userData.email);
+          setPhone(userData.phone);
+
+          setSpeciality(userData.speciality);
+          setLocation(userData.location);
+          setUserType(userData.userType);
+
+          //  {"email": "Sana2@gmail.com", "location": "london", "phone": "099898988",
+          // "speciality": "gynaco", "uid": "yrupdak0d4UlVXaJ0OIZdZbcOLI3",
+          //"userType": "Doctor", "username": "Sana"}
         }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      }
-    };
+      };
 
-    fetchUserProfile();
-  }, [userId]);
+      fetchUserType();
+    }
+  }, []);
 
-  const addQualification = () => {
+  const addQualification = async () => {
     // Add qualification to the Qualification collection
     const qualification = {degreeName, institute, passingYear};
+    const userProfile = {
+      email: email,
+      location: location,
+      phone: phone,
+      speciality: speciality,
+      uid: auth().currentUser.uid,
+      userType: userType,
+      username: username,
+    };
+    const userProfileRef = firestore().collection('UserProfile');
+    const userSnapshot = await userProfileRef
+      .where('uid', '==', auth().currentUser.uid)
+      .get();
 
-    firestore()
-      .collection('Qualification')
-      .add({
-        doctorId: userId,
-        ...qualification,
-      })
-      .then(() => {
-        setQualificationModalVisible(false);
-        // Refresh user details after adding qualification
-        fetchUserProfile();
-      })
-      .catch(error => {
-        console.error('Error adding qualification:', error);
-      });
+    if (userSnapshot.empty) {
+      // No existing document, add a new one
+      await firestore()
+        .collection('UserProfile')
+        .add({...userProfile, ...qualification}); // Merge userProfile and qualification into a single object
+      Alert.alert('Added: User Position Saved Successfully!');
+    } else {
+      // User profile exists, update state with existing data
+      console.log('userProfile==', userProfile);
+      console.log('qualification==', qualification);
+
+      // Merge userProfile and qualification into a single object before updating the document
+      const updatedData = {...userProfile, ...qualification};
+
+      // Update the existing document
+      await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
+      Alert.alert('Updated: Appointment Position Successfully!');
+    }
   };
 
-  const addExperience = () => {
+  const addExperience = async () => {
     // Add experience to the Experience collection
     const experience = {companyName, position, startYear, endYear};
 
-    firestore()
-      .collection('Experience')
-      .add({
-        doctorId: userId,
-        ...experience,
-      })
-      .then(() => {
-        setExperienceModalVisible(false);
-        // Refresh user details after adding experience
-        fetchUserProfile();
-      })
-      .catch(error => {
-        console.error('Error adding experience:', error);
-      });
+    const userProfile = {
+      email: email,
+      location: location,
+      phone: phone,
+      speciality: speciality,
+      uid: auth().currentUser.uid,
+      userType: userType,
+      username: username,
+    };
+    const userProfileRef = firestore().collection('UserProfile');
+    const userSnapshot = await userProfileRef
+      .where('uid', '==', auth().currentUser.uid)
+      .get();
+
+    if (userSnapshot.empty) {
+      // No existing document, add a new one
+      await firestore()
+        .collection('UserProfile')
+        .add({...userProfile, ...experience}); // Merge userProfile and qualification into a single object
+      Alert.alert('Added: User Position Saved Successfully!');
+    } else {
+      // User profile exists, update state with existing data
+      console.log('userProfile==', userProfile);
+      console.log('experience==', experience);
+
+      // Merge userProfile and qualification into a single object before updating the document
+      const updatedData = {...userProfile, ...experience};
+
+      // Update the existing document
+      await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
+      Alert.alert('Updated: Appointment Position Successfully!');
+    }
   };
   const handleAppointmentBooking = async () => {};
 
@@ -106,53 +160,46 @@ const ProfileScreen = ({route}) => {
       <ScrollView style={{marginTop: 40}}>
         <View style={AppStyles.paddingHorizontal24}>
           <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Doctor ID:</Text>
+            <Text style={AppStyles.textinputTitle}>UserName:</Text>
             <TextInput
               style={AppStyles.textinputStyel}
-              value={doctorId}
-              onChangeText={text => setDoctorId(text)}
+              value={username}
+              onChangeText={text => setUserName(text)}
             />
           </View>
           <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Patient ID:</Text>
+            <Text style={AppStyles.textinputTitle}>Email Address:</Text>
             <TextInput
               style={AppStyles.textinputStyel}
-              value={patientId}
-              onChangeText={text => setPatientId(text)}
+              value={email}
+              onChangeText={text => setEmail(text)}
             />
           </View>
           <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Custom Message:</Text>
+            <Text style={AppStyles.textinputTitle}>Contact Number:</Text>
             <TextInput
               style={AppStyles.textinputStyel}
-              value={customMessage}
-              onChangeText={text => setCustomMessage(text)}
+              value={phone}
+              onChangeText={text => setPhone(text)}
             />
           </View>
           <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Appointment Date:</Text>
+            <Text style={AppStyles.textinputTitle}>Location:</Text>
             <TextInput
               style={AppStyles.textinputStyel}
-              value={appmtDate}
-              onChangeText={text => setAppmtDate(text)}
+              value={location}
+              onChangeText={text => setLocation(text)}
             />
           </View>
           <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Appointment Time:</Text>
+            <Text style={AppStyles.textinputTitle}>Speciality:</Text>
             <TextInput
               style={AppStyles.textinputStyel}
-              value={appmtTime}
-              onChangeText={text => setAppmtTime(text)}
+              value={speciality}
+              onChangeText={text => setSpeciality(text)}
             />
           </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Status:</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              value={status}
-              onChangeText={text => setStatus(text)}
-            />
-          </View>
+
           {/* Button to add qualification */}
           <TouchableOpacity
             style={styles.addButton}

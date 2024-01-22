@@ -158,6 +158,7 @@ function DrawerNavigation() {
             <FontAwesome name="star" size={20} color="#808080" />
           ),
         }}
+        initialParams={{userType: userType}} // Passing userType as a parameter
         component={ProfileScreen}
       />
       <Drawer.Screen
