@@ -23,18 +23,19 @@ const ProfileScreen = ({route}) => {
 
   const [qualificationModalVisible, setQualificationModalVisible] =
     useState(false);
+  const [qualifticationObject, setqualifticationObject] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
   const [position, setPosition] = useState('');
 
+  const [experienceObject, setExperienceObject] = useState('');
   const [experienceModalVisible, setExperienceModalVisible] = useState(false);
   const [degreeName, setDegreeName] = useState('');
   const [institute, setInstitute] = useState('');
   const [passingYear, setPassingYear] = useState('');
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [username, setUserName] = useState('');
   const [phone, setPhone] = useState('');
   const [location, setLocation] = useState('');
@@ -69,58 +70,35 @@ const ProfileScreen = ({route}) => {
           setLocation(userData.location);
           setUserType(userData.userType);
 
-          //  {"email": "Sana2@gmail.com", "location": "london", "phone": "099898988",
-          // "speciality": "gynaco", "uid": "yrupdak0d4UlVXaJ0OIZdZbcOLI3",
-          //"userType": "Doctor", "username": "Sana"}
+          setCompanyName(userData.companyName);
+          setStartYear(userData.startYear);
+          setEndYear(userData.endYear);
+          setPosition(userData.position);
+
+          setDegreeName(userData.degreeName);
+          setInstitute(userData.institute);
+          setPassingYear(userData.passingYear);
         }
       };
-
       fetchUserType();
     }
   }, []);
 
-  const addQualification = async () => {
+  const addQualification = () => {
     // Add qualification to the Qualification collection
     const qualification = {degreeName, institute, passingYear};
-    const userProfile = {
-      email: email,
-      location: location,
-      phone: phone,
-      speciality: speciality,
-      uid: auth().currentUser.uid,
-      userType: userType,
-      username: username,
-    };
-    const userProfileRef = firestore().collection('UserProfile');
-    const userSnapshot = await userProfileRef
-      .where('uid', '==', auth().currentUser.uid)
-      .get();
-
-    if (userSnapshot.empty) {
-      // No existing document, add a new one
-      await firestore()
-        .collection('UserProfile')
-        .add({...userProfile, ...qualification}); // Merge userProfile and qualification into a single object
-      Alert.alert('Added: User Position Saved Successfully!');
-    } else {
-      // User profile exists, update state with existing data
-      console.log('userProfile==', userProfile);
-      console.log('qualification==', qualification);
-
-      // Merge userProfile and qualification into a single object before updating the document
-      const updatedData = {...userProfile, ...qualification};
-
-      // Update the existing document
-      await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
-      Alert.alert('Updated: Appointment Position Successfully!');
-      setQualificationModalVisible(false);
-    }
+    setqualifticationObject(qualification);
+    setQualificationModalVisible(false);
   };
 
-  const addExperience = async () => {
+  const addExperience = () => {
     // Add experience to the Experience collection
     const experience = {companyName, position, startYear, endYear};
+    setExperienceObject(experience);
+    setExperienceModalVisible(false);
+  };
 
+  const handleAppointmentUpdate = async () => {
     const userProfile = {
       email: email,
       location: location,
@@ -139,24 +117,26 @@ const ProfileScreen = ({route}) => {
       // No existing document, add a new one
       await firestore()
         .collection('UserProfile')
-        .add({...userProfile, ...experience}); // Merge userProfile and qualification into a single object
+        .add({...userProfile, ...experienceObject, ...qualifticationObject}); // Merge userProfile and qualification into a single object
       Alert.alert('Added: User Position Saved Successfully!');
-      setExperienceModalVisible(false);
     } else {
       // User profile exists, update state with existing data
       console.log('userProfile==', userProfile);
-      console.log('experience==', experience);
+      console.log('experience==', experienceObject);
+      console.log('experience==', qualifticationObject);
 
       // Merge userProfile and qualification into a single object before updating the document
-      const updatedData = {...userProfile, ...experience};
+      const updatedData = {
+        ...userProfile,
+        ...experienceObject,
+        ...qualifticationObject,
+      };
 
       // Update the existing document
       await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
       Alert.alert('Updated: Appointment Position Successfully!');
-      setExperienceModalVisible(false);
     }
   };
-  const handleAppointmentBooking = async () => {};
 
   return (
     <SafeAreaView style={AppStyles.signupViewWhiteBg}>
@@ -299,7 +279,7 @@ const ProfileScreen = ({route}) => {
 
           <TouchableOpacity
             style={AppStyles.roundButtonstyle}
-            onPress={handleAppointmentBooking}>
+            onPress={handleAppointmentUpdate}>
             <Text style={AppStyles.roundButtonTextstyle}>
               Update Appointment
             </Text>
