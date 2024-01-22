@@ -113,6 +113,7 @@ const ProfileScreen = ({route}) => {
       // Update the existing document
       await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
       Alert.alert('Updated: Appointment Position Successfully!');
+      setQualificationModalVisible(false);
     }
   };
 
@@ -140,6 +141,7 @@ const ProfileScreen = ({route}) => {
         .collection('UserProfile')
         .add({...userProfile, ...experience}); // Merge userProfile and qualification into a single object
       Alert.alert('Added: User Position Saved Successfully!');
+      setExperienceModalVisible(false);
     } else {
       // User profile exists, update state with existing data
       console.log('userProfile==', userProfile);
@@ -151,6 +153,7 @@ const ProfileScreen = ({route}) => {
       // Update the existing document
       await userProfileRef.doc(userSnapshot.docs[0].id).update(updatedData);
       Alert.alert('Updated: Appointment Position Successfully!');
+      setExperienceModalVisible(false);
     }
   };
   const handleAppointmentBooking = async () => {};

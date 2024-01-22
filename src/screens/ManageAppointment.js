@@ -9,6 +9,7 @@ import {
   Modal,
   StyleSheet,
   Alert,
+  Button,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import styles from '../styles';
@@ -53,29 +54,10 @@ function ManageAppointment() {
     return <ActivityIndicator />;
   }
 
-  /*const handleAction = async status => {
-    try {
-      if (selectedAppointment) {
-        // Update appointment status and remove from the list
-        await firestore()
-          .collection('Appointment')
-          .doc(selectedAppointment.id)
-          .update({
-            status: status,
-          });
-
-        // Close the modal
-        setModalVisible(false);
-      }
-    } catch (error) {
-      console.error('Error updating appointment status:', error);
-    }
-  };
-*/
-
   const handleAction = async (status, anyItem) => {
     // Perform validation if needed
     console.log('anyItem==', anyItem);
+    //extracting varible from anyitem
     const {
       patientId,
       patientName,
@@ -85,6 +67,7 @@ function ManageAppointment() {
       appmtDate,
       appmtTime,
     } = anyItem;
+
     // Create an appointment object
     const appointment = {
       patientId,
@@ -109,12 +92,14 @@ function ManageAppointment() {
       // No existing document, add a new one
       await firestore().collection('Appointment').add(appointment);
       Alert.alert('Added: User Position Saved Successfully!');
+      setModalVisible(false);
     } else {
       // Update the existing document
       await userPositionRef
         .doc(userPositionSnapshot.docs[0].id)
         .update(appointment);
       Alert.alert('Updated: Appointment Position Successfully!');
+      setModalVisible(false);
     }
   };
 
@@ -167,24 +152,15 @@ function ManageAppointment() {
               justifyContent: 'center',
               marginTop: 8,
             }}>
-            <TouchableOpacity
-              style={[InlineStyles.modalButton, {backgroundColor: 'green'}]}
-              onPress={() => handleAction('approved', selectedAppointment)}>
-              <Text style={InlineStyles.buttonText}>Approve</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[InlineStyles.modalButton, {backgroundColor: 'red'}]}
-              onPress={() => handleAction('rejected', selectedAppointment)}>
-              <Text style={InlineStyles.buttonText}>Reject</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                (InlineStyles.modalButton,
-                {backgroundColor: 'blue', height: 30, width: 60})
-              }
-              onPress={() => setModalVisible(false)}>
-              <Text style={InlineStyles.buttonText}>Close</Text>
-            </TouchableOpacity>
+            <Button
+              title="Reject"
+              onPress={() => handleAction('rejected', selectedAppointment)} // Pass a function reference
+            />
+            <Button
+              title="Approve"
+              onPress={() => handleAction('approved', selectedAppointment)} // Pass a function reference
+            />
+            <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
         </View>
       </Modal>

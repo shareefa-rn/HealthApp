@@ -21,6 +21,11 @@ function LoginScreen({route}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  //sanap@gmail.com -- patient
+  //sana2@gmail.com -- dr
+  //drsana@gmail.com -- dr
+  //test1234
+
   const handleSubmit = async () => {
     if (email && password) {
       await auth()
