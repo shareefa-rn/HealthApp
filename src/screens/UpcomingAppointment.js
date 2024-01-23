@@ -11,6 +11,7 @@ import firestore from '@react-native-firebase/firestore';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../styles';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 function UpComingAppointment() {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -20,8 +21,8 @@ function UpComingAppointment() {
   useEffect(() => {
     const subscriber = firestore()
       .collection('Appointment')
-      // Filter results need to add doctor id
       .where('status', '==', 'approved')
+      .where('uid', '==', auth().currentUser.uid)
       .get()
       .then(querySnapshot => {
         const allPlaces = [];
@@ -78,6 +79,7 @@ function UpComingAppointment() {
         data={allPlaces}
         keyExtractor={(item, index) => index.toString()} // or use a unique ID from your data
         renderItem={renderItem}
+        ListEmptyComponent={<Text>No Upcoming appointments</Text>}
       />
     </View>
   );

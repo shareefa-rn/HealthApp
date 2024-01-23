@@ -8,8 +8,8 @@ import {
   Image,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../styles';
+import auth from '@react-native-firebase/auth';
 
 function AppointmentHistory() {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -18,6 +18,7 @@ function AppointmentHistory() {
   useEffect(() => {
     const subscriber = firestore()
       .collection('Appointment')
+      .where('uid', '==', auth().currentUser.uid)
       .onSnapshot(querySnapshot => {
         const allPlaces = [];
 
@@ -72,6 +73,7 @@ function AppointmentHistory() {
         data={allPlaces}
         keyExtractor={(item, index) => index.toString()} // or use a unique ID from your data
         renderItem={renderItem}
+        ListEmptyComponent={<Text>No appointments</Text>}
       />
     </View>
   );

@@ -65,6 +65,7 @@ const CreateAppointment = () => {
         appmtTime,
         customMessage,
         status: 'pending',
+        uid: userId,
       };
       const appointmentRef = firestore().collection('Appointment');
       console.log('appointment: ===', selectedDoctor);
