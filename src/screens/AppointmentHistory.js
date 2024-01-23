@@ -70,7 +70,7 @@ function AppointmentHistory() {
     <View style={styles.appointmentscontainer}>
       <FlatList
         data={allPlaces}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()} // or use a unique ID from your data
         renderItem={renderItem}
       />
     </View>

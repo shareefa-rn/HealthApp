@@ -4,6 +4,9 @@ import HomeScreen from '../screens/HomeScreen';
 import AppointmentHistory from '../screens/AppointmentHistory';
 import {DrawerItemList, createDrawerNavigator} from '@react-navigation/drawer';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
+
 import Colors from '../Colors';
 import auth from '@react-native-firebase/auth';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -155,7 +158,7 @@ function DrawerNavigation() {
           drawerLabel: 'ProfileScreen',
           title: 'ProfileScreen',
           drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
+            <AntDesign name="profile" size={20} color="#808080" />
           ),
         }}
         initialParams={{userType: userType}} // Passing userType as a parameter
@@ -167,7 +170,7 @@ function DrawerNavigation() {
           drawerLabel: 'UpComing Appointments',
           title: 'UpComing Appointments',
           drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
+            <MaterialIcons name="upcoming" size={20} color="#808080" />
           ),
         }}
         initialParams={{userType: userType}} // Passing userType as a parameter
@@ -181,7 +184,7 @@ function DrawerNavigation() {
             drawerLabel: 'Manage Appointment',
             title: 'Manage Appointment',
             drawerIcon: () => (
-              <FontAwesome name="star" size={20} color="#808080" />
+              <MaterialIcons name="manage-accounts" size={20} color="#808080" />
             ),
           }}
           component={ManageAppointment}
@@ -195,7 +198,7 @@ function DrawerNavigation() {
             drawerLabel: 'Create Appointment',
             title: 'Create Appointment',
             drawerIcon: () => (
-              <FontAwesome name="star" size={20} color="#808080" />
+              <FontAwesome name="pencil" size={20} color="#808080" />
             ),
           }}
         />
@@ -206,7 +209,7 @@ function DrawerNavigation() {
           drawerLabel: 'AppointmentHistory',
           title: 'AppointmentHistory',
           drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
+            <MaterialIcons name="history" size={20} color="#808080" />
           ),
         }}
         component={AppointmentHistory}
@@ -219,7 +222,7 @@ function DrawerNavigation() {
           drawerLabel: 'Logout',
           title: 'Logout',
           drawerIcon: () => (
-            <FontAwesome name="star" size={20} color="#808080" />
+            <AntDesign name="logout" size={20} color="#808080" />
           ),
         }}
         component={() => {

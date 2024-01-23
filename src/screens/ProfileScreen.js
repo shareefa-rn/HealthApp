@@ -41,6 +41,8 @@ const ProfileScreen = ({route}) => {
   const [location, setLocation] = useState('');
   const [speciality, setSpeciality] = useState('');
   const [userType, setUserType] = useState('');
+  const [isQualificationVisible, setIsQualificationVisible] = useState(false);
+  const [isExperienceVisible, setIsExperienceVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -166,37 +168,41 @@ const ProfileScreen = ({route}) => {
               onChangeText={text => setPhone(text)}
             />
           </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Location:</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              value={location}
-              onChangeText={text => setLocation(text)}
-            />
-          </View>
-          <View style={AppStyles.marginBottom20}>
-            <Text style={AppStyles.textinputTitle}>Speciality:</Text>
-            <TextInput
-              style={AppStyles.textinputStyel}
-              value={speciality}
-              onChangeText={text => setSpeciality(text)}
-            />
-          </View>
+          {userType === 'Doctor' && (
+            <>
+              <View style={AppStyles.marginBottom20}>
+                <Text style={AppStyles.textinputTitle}>Location:</Text>
+                <TextInput
+                  style={AppStyles.textinputStyel}
+                  value={location}
+                  onChangeText={text => setLocation(text)}
+                />
+              </View>
+              <View style={AppStyles.marginBottom20}>
+                <Text style={AppStyles.textinputTitle}>Speciality:</Text>
+                <TextInput
+                  style={AppStyles.textinputStyel}
+                  value={speciality}
+                  onChangeText={text => setSpeciality(text)}
+                />
+              </View>
 
-          {/* Button to add qualification */}
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setQualificationModalVisible(true)}>
-            <Text style={styles.buttonText}>Add Qualification</Text>
-          </TouchableOpacity>
+              {/* Button to add qualification */}
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setQualificationModalVisible(true)}>
+                <Text style={styles.buttonText}>Add Qualification</Text>
+              </TouchableOpacity>
 
-          {/* Button to add experience */}
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setExperienceModalVisible(true)}>
-            <Text style={styles.buttonText}>Add Experience</Text>
-          </TouchableOpacity>
-          {/* Qualification Modal */}
+              {/* Button to add experience */}
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setExperienceModalVisible(true)}>
+                <Text style={styles.buttonText}>Add Experience</Text>
+              </TouchableOpacity>
+              {/* Qualification Modal */}
+            </>
+          )}
           <Modal
             animationType="slide"
             transparent={true}
@@ -280,9 +286,7 @@ const ProfileScreen = ({route}) => {
           <TouchableOpacity
             style={AppStyles.roundButtonstyle}
             onPress={handleAppointmentUpdate}>
-            <Text style={AppStyles.roundButtonTextstyle}>
-              Update Appointment
-            </Text>
+            <Text style={AppStyles.roundButtonTextstyle}>Update Profile</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

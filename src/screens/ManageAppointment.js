@@ -113,7 +113,7 @@ function ManageAppointment() {
     <View style={styles.appointmentscontainer}>
       <FlatList
         data={allPlaces}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()} // or use a unique ID from your data
         renderItem={renderItem}
         ListEmptyComponent={<Text>No pending appointments</Text>}
       />
