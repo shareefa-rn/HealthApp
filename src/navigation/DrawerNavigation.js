@@ -31,6 +31,7 @@ function DrawerNavigation() {
 
   useEffect(() => {
     console.log(auth().currentUser.uid);
+    let isMounted = true;
 
     if (auth().currentUser) {
       const fetchUserType = async () => {
@@ -43,15 +44,22 @@ function DrawerNavigation() {
         if (!userSnapshot.empty) {
           // User profile exists, update state with existing data
           const userData = userSnapshot.docs[0].data();
-          console.log(userData.userType);
 
-          setUserType(userData.userType);
+          if (isMounted) {
+            console.log('user data==', userData.userType);
+
+            setUser(userData);
+            setUserType(userData.userType);
+          }
         }
       };
 
       fetchUserType();
     }
-  }, []);
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   function onAuthStateChanged(user) {
     console.log('auth().currentUser==', auth().currentUser);
@@ -205,6 +213,8 @@ function DrawerNavigation() {
       )}
       <Drawer.Screen
         name="AppointmentHistory"
+        component={AppointmentHistory}
+        initialParams={{userType: userType}}
         options={{
           drawerLabel: 'AppointmentHistory',
           title: 'AppointmentHistory',
@@ -212,8 +222,6 @@ function DrawerNavigation() {
             <MaterialIcons name="history" size={20} color="#808080" />
           ),
         }}
-        component={AppointmentHistory}
-        initialParams={{userType: userType}} // Passing userType as a parameter
       />
 
       <Drawer.Screen

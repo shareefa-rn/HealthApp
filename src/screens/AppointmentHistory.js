@@ -9,16 +9,20 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import styles from '../styles';
-import auth from '@react-native-firebase/auth';
 
-function AppointmentHistory() {
+const AppointmentHistory = ({route}) => {
+  const userType = route.params.userType; // Assuming 'doctor' or 'patient'
+
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [allPlaces, setAllPlaces] = useState([]); // Initial empty array of allPlaces
 
   useEffect(() => {
+    console.log('All appts ', userType);
+
     const subscriber = firestore()
       .collection('Appointment')
-      .where('uid', '==', auth().currentUser.uid)
+      //.where('uid', '==', auth().currentUser.uid) for patients
+      //.where('doctorId', '==', auth().currentUser.uid) for doctors
       .onSnapshot(querySnapshot => {
         const allPlaces = [];
 
@@ -69,6 +73,7 @@ function AppointmentHistory() {
 
   return (
     <View style={styles.appointmentscontainer}>
+      <Text>{userType}</Text>
       <FlatList
         data={allPlaces}
         keyExtractor={(item, index) => index.toString()} // or use a unique ID from your data
@@ -77,6 +82,6 @@ function AppointmentHistory() {
       />
     </View>
   );
-}
+};
 
 export default AppointmentHistory;

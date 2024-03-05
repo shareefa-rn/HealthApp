@@ -18,6 +18,8 @@ import AppStyles from '../AppStyles';
 import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = ({route}) => {
+  const {userNew} = route.params;
+
   const {userId} = auth().currentUser.uid;
   const [user, setUser] = useState(null);
 
@@ -48,6 +50,7 @@ const ProfileScreen = ({route}) => {
 
   useEffect(() => {
     console.log(auth().currentUser.uid);
+    console.log('All profile==', userNew);
 
     if (auth().currentUser) {
       const fetchUserType = async () => {

@@ -12,7 +12,7 @@ import Colors from '../Colors';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
-  const [userType, setUserType] = useState('patient');
+  const [userType, setUserType] = useState('');
   const userOptions = ['Doctor', 'Patient'];
 
   const RadioButton = ({options, selectedOption, onSelect}) => {

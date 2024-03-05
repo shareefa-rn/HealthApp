@@ -25,6 +25,7 @@ function LoginScreen({route}) {
   //sana2@gmail.com -- dr
   //drsana@gmail.com -- dr
   //test1234
+  //patient111@gmail.com
 
   const handleSubmit = async () => {
     if (email && password) {
@@ -47,7 +48,7 @@ function LoginScreen({route}) {
   const showSnackBar = message => {
     Snackbar.show({
       text: message,
-      backgroundColor: 'red',
+      backgroundColor: 'green',
     });
   };
 

@@ -11,18 +11,21 @@ import firestore from '@react-native-firebase/firestore';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../styles';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 
-function UpComingAppointment() {
+function UpComingAppointment({route}) {
+  const {userType} = route.params;
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [allPlaces, setAllPlaces] = useState([]); // Initial empty array of allPlaces
   const navigation = useNavigation();
 
   useEffect(() => {
+    console.log('All place', userType);
+
     const subscriber = firestore()
       .collection('Appointment')
       .where('status', '==', 'approved')
-      .where('uid', '==', auth().currentUser.uid)
+      //.where('uid', '==', auth().currentUser.uid) for patients
+      //.where('doctorId', '==', auth().currentUser.uid) for doctors
       .get()
       .then(querySnapshot => {
         const allPlaces = [];
